@@ -37,7 +37,7 @@ namespace pet_hotel
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public PetColorType petColor { get; set; }
 
-        public DateTime checkedInAt { get; set; }
+        public DateTime? checkedInAt { get; set; }
 
         public PetOwner petOwner {get; set; }
 
@@ -46,6 +46,9 @@ namespace pet_hotel
 
         public void checkIn(){
             this.checkedInAt = DateTime.Now;
+        }
+        public void checkOut(){
+            this.checkedInAt = null;
         }
     }
 }
