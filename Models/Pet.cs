@@ -31,11 +31,11 @@ namespace pet_hotel
 
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public PetBreedType petBreed { get; set;}
+        public PetBreedType breed { get; set;}
 
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public PetColorType petColor { get; set; }
+        public PetColorType color { get; set; }
 
         public DateTime? checkedInAt { get; set; }
 

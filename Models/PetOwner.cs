@@ -17,7 +17,7 @@ namespace pet_hotel
 
         [Required]
         [EmailAddress]
-        public string email { get; set; }
+        public string emailAddress { get; set; }
         
         // Because we know that pets are owned by pet owner
         //we can populate a list of pets this pet owner as
@@ -30,7 +30,7 @@ namespace pet_hotel
         {
             get
             {
-                return this.pets == null ? 0 : this.pets.Count;
+                return pets == null ? 0 : pets.Count;
             }
         } 
     }

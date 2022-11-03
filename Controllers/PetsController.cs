@@ -23,22 +23,26 @@ namespace pet_hotel.Controllers
         // occur when the route is missing in this controller
         [HttpGet]
         public IEnumerable<Pet> GetPets() {
-            return new List<Pet>();
+            return _context.Pets
+                .Include(pet => pet.petOwner)
+                .ToList();
         }
 
         // Get pets by owner id
         [HttpGet("{id}")]
         public Pet getPetById(int id) {
-            Pet pet = _context.Pets.SingleOrDefault(p => p.id == id);
+            Pet pet = _context.Pets.Include(p => p.petOwner).SingleOrDefault(p => p.id == id);
             return pet;
         }
 
         // POST pet by owner id
         [HttpPost]
         public IActionResult createPet([FromBody] Pet pet){
-            _context.Pets.Add(pet);
+            _context.Add(pet);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(getPetById), new {id=pet.id, pet});
+            Pet myPet = _context.Pets.Include(p => p.petOwner).SingleOrDefault(p => p.id == pet.id);
+            // Pet newPet = _context.Pets.Include(p => p.petOwner).SingleOrDefault(p => p.id == pet.id);
+            return CreatedAtAction(nameof(getPetById), new { id = pet.id }, myPet);
         }
 
         [HttpPut("{id}")]
@@ -50,7 +54,7 @@ namespace pet_hotel.Controllers
 
             _context.Pets.Update(pet);
             _context.SaveChanges();
-            return Ok();
+            return Ok(pet);
         }
 
         // delete them pets
@@ -75,7 +79,7 @@ namespace pet_hotel.Controllers
 
             _context.Pets.Update(myPet);
             _context.SaveChanges();
-            return Ok();
+            return Ok(myPet);
         }
 
          // check pet in
@@ -88,7 +92,7 @@ namespace pet_hotel.Controllers
 
             _context.Pets.Update(myPet);
             _context.SaveChanges();
-            return Ok();
+            return Ok(myPet);
         }
 
         // [HttpGet]

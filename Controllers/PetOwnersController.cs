@@ -50,7 +50,7 @@ namespace pet_hotel.Controllers
 
             _context.PetOwners.Update(petOwner);
             _context.SaveChanges();
-            return Ok();
+            return Ok(petOwner);
         }
 
         // DELETE a petOwner
