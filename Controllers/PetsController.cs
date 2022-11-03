@@ -26,6 +26,71 @@ namespace pet_hotel.Controllers
             return new List<Pet>();
         }
 
+        // Get pets by owner id
+        [HttpGet("{id}")]
+        public Pet getPetById(int id) {
+            Pet pet = _context.Pets.SingleOrDefault(p => p.id == id);
+            return pet;
+        }
+
+        // POST pet by owner id
+        [HttpPost]
+        public IActionResult createPet([FromBody] Pet pet){
+            _context.Pets.Add(pet);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(getPetById), new {id=pet.id, pet});
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult updatePet([FromBody] Pet pet, int id) {
+            if (pet.id != id) return NotFound();
+            // Make sure the pet we are trying to update is real
+            Boolean found = _context.Pets.Any(pet => pet.id == id);
+            if(!found) return NotFound();
+
+            _context.Pets.Update(pet);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        // delete them pets
+        [HttpDelete("{id}")]
+        public IActionResult deletePetById(int id) {
+            Pet myPet = _context.Pets.SingleOrDefault(p => p.id == id);
+            if (myPet == null){
+                return NotFound();
+            }
+            _context.Pets.Remove(myPet);
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+        // check pet in
+        [HttpPut("{id}/checkin")]
+        public IActionResult checkInPet(int id){
+            Pet myPet = _context.Pets.SingleOrDefault(p => p.id == id);
+            if(myPet == null) return NotFound();
+
+            myPet.checkIn();
+
+            _context.Pets.Update(myPet);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+         // check pet in
+        [HttpPut("{id}/checkout")]
+        public IActionResult checkOutPet(int id){
+            Pet myPet = _context.Pets.SingleOrDefault(p => p.id == id);
+            if(myPet == null) return NotFound();
+
+            myPet.checkOut();
+
+            _context.Pets.Update(myPet);
+            _context.SaveChanges();
+            return Ok();
+        }
+
         // [HttpGet]
         // [Route("test")]
         // public IEnumerable<Pet> GetPets() {
